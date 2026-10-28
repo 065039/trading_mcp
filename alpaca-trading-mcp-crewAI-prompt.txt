@@ -1,0 +1,716 @@
+I am building an academic project titled:
+
+"Trade Algorithmically using Trading Agents"
+
+The project is a multi-agent algorithmic paper-trading system for US equities using Alpaca paper trading, CrewAI, MCP, Python and a web interface.
+
+IMPORTANT CONTEXT
+
+I have two starter files from class:
+
+1. trading_crew.py
+   - CrewAI MCP client
+   - Currently performs technical analysis using RSI and MACD
+   - Uses CrewAI agents/tasks and a local MCP server.
+
+2. technical_indicators_mcp_server.py
+   - Local MCP server
+   - Fetches OHLCV data from Alpaca
+   - Provides technical-indicator tools such as RSI and MACD.
+
+There are also two reference multi-stock implementations on GitHub:
+
+1. https://github.com/harnalashok/LLMs/blob/main/crewaiModels/mcp_servers/stock_trading/trading_crew_multiStocks.py
+
+2. https://github.com/harnalashok/LLMs/blob/main/crewaiModels/mcp_servers/stock_trading/servers/technical_indicators_mcp_server_multiStocks.py
+
+Use the existing class files as the conceptual starting point and use the GitHub multi-stock files as reference. Do NOT simply copy them. Build an improved, modular system that satisfies the project requirements below.
+
+PROJECT REQUIREMENTS
+
+The system must:
+
+1. Trade US equities using Alpaca PAPER trading only.
+2. Support a portfolio of approximately 30–45 stocks across the group.
+3. Support 10–15 stocks per student. Group has 3 students and each student has a budget of $100,000. Student names - Kunal, Navroop, Kavya.
+4. Allow approximately 30% of the portfolio to be high-beta/growth-satellite stocks.
+5. Support 15–20 day paper-trading experiments.
+6. Use CrewAI as the agentic framework.
+7. Use MCP with a LOCAL MCP server.
+8. Do NOT use Alpaca's external MCP server.
+9. The local MCP server should contain tools that interact with Alpaca APIs and calculate financial indicators.
+10. Fetch OHLCV data for ALL selected stocks in ONE batch request rather than making one Alpaca request per stock.
+11. Cache the fetched OHLCV data locally in memory for subsequent indicator calculations.
+12. Save agent outputs into timestamped Markdown files.
+13. Build a Streamlit web interface.
+14. Allow users to enter/select stocks.
+15. Allow users to select which indicator groups to use.
+16. Allow users to enter Alpaca API credentials securely through environment variables or the UI without hardcoding credentials.
+17. Display analysis and paper-trading results through the web interface.
+18. Include optional human approval before executing paper trades.
+19. Maintain logs of decisions, scores, orders and portfolio performance.
+20. Make the architecture modular so new indicators, agents and models can be added easily.
+
+ARCHITECTURE
+
+Implement the following agent architecture:
+
+AGENT 1 — MARKET DATA AGENT
+Purpose:
+- Receive the stock watchlist.
+- Call fetch_ohlcv_batch() exactly once for the selected stocks.
+- Validate returned data.
+- Report missing/invalid symbols.
+- Ensure downstream agents can access cached OHLCV data.
+
+AGENT 2 — TECHNICAL ANALYST
+Purpose:
+Calculate and interpret technical indicators for each selected stock.
+
+Use these indicator groups:
+
+TREND:
+- EMA20
+- EMA50
+- EMA200
+- ADX
+
+MOMENTUM:
+- RSI
+- MACD
+- ROC
+- Stochastic Oscillator
+- TSI
+
+VOLUME:
+- OBV
+- CMF
+- MFI
+- PVO
+
+VOLATILITY:
+- ATR
+- NATR
+- Bollinger Band Width
+- Donchian Channels
+
+STATISTICAL:
+- returns
+- rolling z-score
+- rolling skewness
+
+Use pandas/pandas_ta where appropriate, but implement robust fallbacks where necessary.
+
+AGENT 3 — QUANT/ML ANALYST
+Purpose:
+- Generate a feature matrix from historical OHLCV and technical indicators.
+- Predict the probability that a stock will have a positive short-term forward return.
+- Use a simple, explainable ML model such as RandomForestClassifier or HistGradientBoostingClassifier.
+- Use a TIME-BASED train/validation split. Never randomly shuffle time-series data.
+- Define a target such as positive 5-day forward return.
+- Avoid look-ahead bias and data leakage.
+- Output:
+  symbol
+  prediction_probability
+  ML score
+  model information
+  important features if available.
+
+AGENT 4 — NEWS ANALYST
+Purpose:
+- Retrieve recent news for each selected stock through a configurable news API/tool.
+- Analyse positive/negative/neutral sentiment.
+- Produce a normalized News Score from 0–100.
+- News must be one input to the decision rather than the sole decision-maker.
+- If no news API is configured, the system must continue gracefully and use a neutral news score.
+
+AGENT 5 — SIGNAL ANALYST
+Purpose:
+Combine the analytical outputs into a deterministic composite score.
+
+Use:
+
+Technical Score = 60%
+ML Score = 20%
+News Score = 10%
+Risk Score = 10%
+
+Final Score = weighted combination of these components.
+
+Normalize every component to 0–100.
+
+Decision thresholds:
+
+80–100 = STRONG BUY
+70–79 = BUY
+55–69 = HOLD
+40–54 = WEAK HOLD
+0–39 = SELL
+
+The final score must be calculated by deterministic Python code, NOT invented arbitrarily by the LLM.
+
+For each stock output:
+
+symbol
+technical_score
+ml_score
+news_score
+risk_score
+final_score
+decision
+conviction
+rationale
+
+AGENT 6 — PORTFOLIO STRATEGIST
+Purpose:
+- Take all stock decisions together.
+- Consider current holdings, available cash and portfolio exposure.
+- Rank opportunities by final score.
+- Decide which stocks to buy, hold or sell.
+- Enforce portfolio rules.
+
+Implement configurable rules:
+
+- maximum position size: 10% of portfolio
+- minimum cash reserve: 10%
+- configurable maximum number of new buys
+- configurable maximum number of sells
+- avoid excessive concentration
+- account for high-beta/growth-satellite stocks
+- use current holdings before recommending new trades
+- do not buy a stock merely because it has a high score if portfolio constraints make it inappropriate.
+
+AGENT 7 — RISK AND EXECUTION AGENT
+Purpose:
+- Act as the final gatekeeper before paper-trade execution.
+- Validate position size.
+- Validate available cash.
+- Check existing positions.
+- Check open orders.
+- Check portfolio exposure.
+- Prevent duplicate/conflicting orders.
+- Calculate ATR-based stop-loss and take-profit levels.
+- Require optional human confirmation before executing trades.
+
+Example risk rules:
+
+Stop loss:
+entry price - 2 × ATR
+
+Take profit:
+entry price + 3 × ATR
+
+These should be configurable.
+
+If human approval is enabled:
+
+ANALYSIS
+→ PORTFOLIO PLAN
+→ RISK CHECK
+→ SHOW PROPOSED ORDERS
+→ USER APPROVAL
+→ ALPACA PAPER ORDER
+
+If approval is disabled, execution can proceed only when all automated risk checks pass.
+
+MCP SERVER
+
+Extend the existing technical_indicators_mcp_server.py into a modular local MCP server.
+
+Required tools should include:
+
+DATA:
+- fetch_ohlcv_batch(symbols, lookback_days, timeframe)
+- fetch_ohlcv(symbol, lookback_days, timeframe)
+- get_latest_prices(symbols)
+
+TECHNICAL:
+- calculate_all_indicators(symbol)
+- calculate_trend_indicators(symbol)
+- calculate_momentum_indicators(symbol)
+- calculate_volume_indicators(symbol)
+- calculate_volatility_indicators(symbol)
+- calculate_statistical_indicators(symbol)
+
+QUANT/ML:
+- generate_features(symbol)
+- train_prediction_model(symbols)
+- predict_return_probability(symbol)
+
+NEWS:
+- get_stock_news(symbol)
+- calculate_news_sentiment(symbol)
+
+PORTFOLIO:
+- get_account_info()
+- get_positions()
+- get_open_orders()
+- calculate_portfolio_exposure()
+
+TRADING:
+- place_buy_order(symbol, qty)
+- place_sell_order(symbol, qty)
+- cancel_order(order_id)
+- cancel_all_orders(symbol)
+
+Do not make separate Alpaca data requests for every indicator.
+
+The architecture must be:
+
+ONE batch OHLCV request
+        ↓
+cache OHLCV by symbol
+        ↓
+technical calculations from cache
+        ↓
+ML calculations from cache
+        ↓
+agent analysis
+
+The single-symbol fetch tool may remain for debugging, but it must NOT be the default workflow.
+
+CREWAI EXECUTION
+
+Use this execution pattern:
+
+PHASE 1:
+Market Data Agent
+
+PHASE 2:
+Run these analytical agents in parallel where practical:
+- Technical Analyst
+- Quant/ML Analyst
+- News Analyst
+
+PHASE 3:
+Signal Analyst
+
+PHASE 4:
+Portfolio Strategist
+
+PHASE 5:
+Risk and Execution Agent
+
+Do not unnecessarily run independent analytical agents sequentially.
+
+Use CrewAI's capabilities appropriately, but prioritize reliability and simplicity over unnecessary complexity.
+
+SCORING ENGINE
+
+Create a separate scoring_engine.py module.
+
+Implement deterministic functions for:
+
+calculate_trend_score()
+calculate_momentum_score()
+calculate_volume_score()
+calculate_volatility_score()
+calculate_statistical_score()
+calculate_technical_score()
+calculate_ml_score()
+calculate_news_score()
+calculate_risk_score()
+calculate_final_score()
+
+Return structured dictionaries/models.
+
+Do not bury scoring formulas inside prompts.
+
+PORTFOLIO ENGINE
+
+Create a portfolio_manager.py module.
+
+It should calculate:
+
+- cash
+- invested capital
+- portfolio value
+- position weights
+- sector exposure if sector data is available
+- high-beta exposure
+- proposed position size
+- remaining cash
+- risk-adjusted allocation
+
+It should generate a structured action plan:
+
+{
+  "buys": [],
+  "sells": [],
+  "holds": [],
+  "skipped": [],
+  "cash_after": ...
+}
+
+TRADING
+
+Use Alpaca PAPER trading only.
+
+Never hardcode API keys.
+
+Use:
+
+ALPACA_API_KEY
+ALPACA_SECRET_KEY
+
+from environment variables.
+
+Create a .env.example file showing the required variable names but never include real credentials.
+
+WEB INTERFACE
+
+Create:
+
+web_app.py
+
+using Streamlit.
+
+The interface should contain:
+
+SIDEBAR:
+- Alpaca API key input
+- Alpaca secret key input
+- stock watchlist input
+- capital
+- lookback days
+- timeframe
+- indicator-group checkboxes
+- maximum position size
+- cash reserve
+- maximum new buys
+- maximum sells
+- human approval toggle
+
+MAIN PAGE:
+
+1. Portfolio Summary
+2. Stock ranking table
+3. Buy/Hold/Sell signals
+4. Composite scores
+5. Technical indicators
+6. ML probabilities
+7. News sentiment
+8. Recommended position sizes
+9. Risk levels
+10. Proposed orders
+11. Execution results
+12. Link/path to run reports
+
+Use charts where useful.
+
+LOGGING
+
+Create a logging/reporting module.
+
+Every run must create a unique run ID:
+
+YYYYMMDD-HHMMSS
+
+Create:
+
+reports/
+logs/
+runs/
+
+Each agent's output must be stored in Markdown.
+
+Use filenames similar to:
+
+agentNameDDMMYYYY-HH:MM.md
+
+If multiple files would collide, include seconds.
+
+Also maintain structured logs:
+
+logs/trades.csv
+logs/scores.csv
+logs/portfolio_history.csv
+logs/experiments.csv
+
+Record:
+
+timestamp
+run_id
+symbol
+technical_score
+ml_score
+news_score
+risk_score
+final_score
+decision
+position_size
+entry_price
+stop_loss
+take_profit
+order_id
+order_status
+
+EXPERIMENT FRAMEWORK
+
+Create an experiment configuration so I can compare:
+
+Experiment 1:
+RSI + MACD
+
+Experiment 2:
+Trend + Momentum
+
+Experiment 3:
+Trend + Momentum + Volume + Volatility
+
+Experiment 4:
+Technical + ML
+
+Experiment 5:
+Technical + ML + News
+
+Store the configuration and results in:
+
+logs/experiments.csv
+
+Track:
+
+experiment_id
+timestamp
+indicators_used
+model_used
+number_of_stocks
+number_of_buys
+number_of_sells
+portfolio_value
+return_percentage
+win_rate if available
+maximum_drawdown if available
+
+BACKTESTING / VALIDATION
+
+Add a lightweight validation module.
+
+Do not claim that the system is profitable simply because it produces BUY signals.
+
+Provide historical evaluation where possible.
+
+Use time-series validation.
+
+Report:
+
+- total return
+- win rate
+- number of trades
+- maximum drawdown
+- average return per trade
+
+Keep this separate from live/paper trading.
+
+DATA QUALITY AND ERROR HANDLING
+
+The system must gracefully handle:
+
+- invalid ticker
+- no OHLCV data
+- API timeout
+- Alpaca rate limit
+- missing news
+- insufficient historical bars
+- model-training failure
+- missing indicators
+- duplicate symbols
+- invalid user input
+- insufficient buying power
+- existing open orders
+- market/order errors
+
+Do not crash the complete system because one stock has bad data.
+
+Return structured error information and continue processing valid stocks.
+
+SECURITY
+
+IMPORTANT:
+
+- Never hardcode API credentials.
+- Never print API secrets.
+- Never write secrets into Markdown reports.
+- Add .env to .gitignore.
+- Provide .env.example.
+- Do not commit credentials.
+- Mask secrets in the Streamlit interface.
+- Paper trading only.
+
+CODE QUALITY
+
+Use:
+
+- type hints
+- docstrings
+- modular functions
+- dataclasses or Pydantic models for structured outputs
+- logging
+- clear error handling
+- configuration variables
+- reusable functions
+
+Do not put the entire project into one Python file.
+
+Do not unnecessarily rewrite working starter code unless required.
+
+Before modifying files, inspect the existing project structure and understand the existing trading_crew.py and technical_indicators_mcp_server.py.
+
+Use the existing code as the starting point and preserve useful class functionality such as RSI/MACD.
+
+REFERENCE IMPLEMENTATION
+
+Inspect these GitHub files for implementation ideas, especially their multi-stock caching and reporting approach:
+
+https://github.com/harnalashok/LLMs/blob/main/crewaiModels/mcp_servers/stock_trading/trading_crew_multiStocks.py
+
+https://github.com/harnalashok/LLMs/blob/main/crewaiModels/mcp_servers/stock_trading/servers/technical_indicators_mcp_server_multiStocks.py
+
+Do not blindly copy them.
+
+IMPLEMENTATION PROCESS
+
+Do NOT immediately generate a giant amount of code.
+
+First:
+
+1. Inspect the existing files.
+2. Summarize the existing architecture.
+3. Identify what can be reused.
+4. Propose the exact files/modules you will create or modify.
+5. Explain dependencies.
+6. Then implement incrementally.
+
+Implement in this order:
+
+STEP 1:
+Refactor MCP server and add batch OHLCV caching.
+
+STEP 2:
+Add technical indicators.
+
+STEP 3:
+Add deterministic scoring engine.
+
+STEP 4:
+Add ML prediction module.
+
+STEP 5:
+Add news integration with graceful fallback.
+
+STEP 6:
+Build the seven-agent CrewAI workflow.
+
+STEP 7:
+Add portfolio manager and risk engine.
+
+STEP 8:
+Add Alpaca paper-trading execution.
+
+STEP 9:
+Add Markdown/CSV logging.
+
+STEP 10:
+Add Streamlit web interface.
+
+STEP 11:
+Add tests.
+
+STEP 12:
+Run an end-to-end paper-trading dry run without placing orders.
+
+STEP 13:
+Only after the dry run works, support actual paper-order execution with human confirmation.
+
+TESTING
+
+Create tests for:
+
+- symbol cleaning
+- batch OHLCV parsing
+- indicator calculations
+- scoring
+- ML feature generation
+- position sizing
+- risk limits
+- portfolio constraints
+- order generation
+- logging
+- API failure handling
+
+Create a dry-run mode:
+
+PAPER_TRADING_MODE=false
+
+When false:
+- fetch data
+- analyse
+- score
+- create portfolio plan
+- show proposed orders
+- DO NOT place Alpaca orders
+
+When true:
+- allow Alpaca paper orders after all risk checks and optional human approval.
+
+README
+
+Create a complete README containing:
+
+1. Project objective
+2. Architecture diagram in Mermaid
+3. Agent descriptions
+4. MCP architecture
+5. Indicator list
+6. Scoring methodology
+7. ML methodology
+8. Portfolio rules
+9. Risk-management rules
+10. Installation
+11. Environment variables
+12. How to run CLI
+13. How to run Streamlit
+14. How to run dry-run mode
+15. How to enable paper trading
+16. Experiment methodology
+17. Logging structure
+18. Limitations
+19. Future improvements
+
+FINAL REQUIREMENT
+
+The finished system should be demonstrably different from the original class project.
+
+The original project was essentially:
+
+OHLCV → RSI → MACD → Strategy → BUY/NO BUY
+
+The improved system should be:
+
+Batch OHLCV
+→ Technical analysis
+→ Quant/ML analysis
+→ News analysis
+→ Composite scoring
+→ Portfolio optimization
+→ Risk management
+→ Human approval
+→ Alpaca paper trading
+→ Logging and performance tracking
+
+Keep the implementation practical enough to run on a student's laptop using a local Ollama model or another configured LLM.
+
+Do not use unnecessary paid services.
+
+At the end, provide:
+
+1. Final project tree
+2. List of files created/modified
+3. Installation commands
+4. Environment variables required
+5. Exact command to run the CLI
+6. Exact command to run Streamlit
+7. Dry-run instructions
+8. Paper-trading instructions
+9. Example expected output
+10. Known limitations

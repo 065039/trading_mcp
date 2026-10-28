@@ -1,0 +1,74 @@
+timestamp,student,symbol,status,side,qty,order_id,error
+2026-10-11T12:21:10.847287+00:00,Navroop,CVX,submitted,buy,47,ef25eb71-8862-45ec-9897-a362841ce1cb,
+2026-10-11T12:21:10.847287+00:00,Navroop,MA,submitted,buy,16,d34bb36d-e72f-4415-806f-488f33dc0c09,
+2026-10-11T12:21:10.847287+00:00,Kunal,PLTR,submitted,buy,47,a64801ab-0c66-449a-88f8-3acc1f86498d,
+2026-10-12T08:15:05.565915+00:00,Kunal,CSCO,submitted,buy,84,a8b969f7-431c-4806-bba9-5071918f05c4,
+2026-10-12T08:15:05.565915+00:00,Navroop,COP,submitted,buy,74,593389c0-bae4-4fbd-85a4-f405bdae239a,
+2026-10-12T08:15:05.565915+00:00,Kavya,AMGN,submitted,buy,24,4a7e292b-ef3c-4076-9929-3ddc1697c818,
+2026-10-12T08:15:05.565915+00:00,Kunal,XOM,submitted,buy,6,bfa22bf3-1785-459e-af98-39502d606a66,
+2026-10-12T08:15:05.565915+00:00,Navroop,AMAT,rejected,,,,Fresh price leaves no whole-share quantity within the shared-account and student-bucket limits.
+2026-10-12T08:15:05.565915+00:00,Kavya,MSFT,rejected,,,,Fresh price leaves no whole-share quantity within the shared-account and student-bucket limits.
+2026-10-12T08:15:05.565915+00:00,Kunal,V,rejected,,,,Fresh price leaves no whole-share quantity within the shared-account and student-bucket limits.
+2026-10-12T08:15:05.565915+00:00,Navroop,PG,rejected,,,,Fresh price leaves no whole-share quantity within the shared-account and student-bucket limits.
+2026-10-12T08:15:05.565915+00:00,Kunal,CSCO,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Navroop,COP,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Kavya,AMGN,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Kunal,XOM,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Navroop,AMAT,submitted,buy,19,d3b7beec-0002-46bc-9861-5f0eca5264b7,
+2026-10-12T08:15:05.565915+00:00,Kavya,MSFT,submitted,buy,18,48187571-6de6-4d76-8afb-0b8c5307d5dd,
+2026-10-12T08:15:05.565915+00:00,Kunal,V,rejected,,,,Fresh price leaves no whole-share quantity within the shared-account and student-bucket limits.
+2026-10-12T08:15:05.565915+00:00,Navroop,PG,rejected,,,,Fresh price leaves no whole-share quantity within the shared-account and student-bucket limits.
+2026-10-12T08:15:05.565915+00:00,Kunal,CSCO,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Navroop,COP,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Kavya,AMGN,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Kunal,XOM,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Navroop,AMAT,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Kavya,MSFT,rejected,,,,An open order already exists.
+2026-10-12T08:15:05.565915+00:00,Kunal,V,submitted,buy,4,9557e152-ff74-4047-a2ab-03b9ba2ac649,
+2026-10-12T08:15:05.565915+00:00,Navroop,PG,submitted,buy,1,a9179895-9342-4104-b0ab-ac596cc069b9,
+2026-10-16T15:53:21.380533+00:00,Kunal,WMT,submitted,buy,75,2ddc8717-e266-4e8b-a461-519c7f555d41,
+2026-10-16T17:39:19.995421+00:00,Kunal,KO,submitted,buy,107,7373949d-c4ef-4aa3-9165-a2589e7a3b26,
+2026-10-16T17:39:19.995421+00:00,Navroop,LLY,submitted,buy,7,acffe771-c5a1-40ed-8957-e8f4fe2e64e4,
+2026-10-16T17:39:19.995421+00:00,Kavya,ACN,submitted,buy,44,580b30dd-7d32-4ca8-ba8e-3489aaea89d6,
+2026-10-16T17:39:19.995421+00:00,Kunal,COST,submitted,buy,10,95324ad0-864f-47a6-a1a4-e2d25bb44bb2,
+2026-10-16T17:39:19.995421+00:00,Navroop,UNH,submitted,buy,24,7bde6071-8c2e-4143-81af-7ee6f432ca43,
+2026-10-16T17:39:19.995421+00:00,Kavya,DIS,submitted,buy,90,4cceb8e2-a108-43fb-8612-7b0a375007fe,
+2026-10-16T17:39:19.995421+00:00,Kunal,CRM,submitted,buy,41,2be29d0b-6112-4057-9dc6-d0855be3aa54,
+2026-10-16T17:39:19.995421+00:00,Navroop,NOW,submitted,buy,70,a74090e6-5647-4ea0-9ff7-20fda3b9d666,
+2026-10-16T17:39:19.995421+00:00,Kavya,MRK,submitted,buy,68,6b187cd9-e703-45c6-95e5-2f1663bb9172,
+2026-10-16T17:39:19.995421+00:00,Kunal,AAPL,submitted,buy,29,b51618b2-a084-458b-93a0-0c97e8770c26,
+2026-10-16T17:39:19.995421+00:00,Navroop,SYK,submitted,buy,33,6f9015d2-4ba7-4c6b-b033-4114cc15b693,
+2026-10-16T17:39:19.995421+00:00,Kavya,ABBV,submitted,buy,35,76605d5e-3fba-4e12-8b29-da9792df091e,
+2026-10-16T17:39:19.995421+00:00,Kunal,TMO,submitted,buy,14,91b48176-03f4-4c97-88d2-5d7acff552e2,
+2026-10-16T17:39:19.995421+00:00,Navroop,ISRG,submitted,buy,23,8e113736-da4a-4faa-b2b6-d4fc3efde8df,
+2026-10-16T17:39:19.995421+00:00,Kavya,LIN,submitted,buy,20,f0a55372-dfbf-47c5-b82a-eaa0886e9aba,
+2026-10-16T17:39:19.995421+00:00,Kunal,HD,submitted,buy,30,93025b0e-36d1-47f3-9618-357863e00554,
+2026-10-16T17:39:19.995421+00:00,Navroop,DHR,submitted,buy,11,30dc1928-f0f6-460c-b462-9034b20ad181,
+2026-10-16T17:39:19.995421+00:00,Kavya,IBM,submitted,buy,43,e17fc82d-5950-4726-9998-a05a5af7ead8,
+2026-10-16T17:39:19.995421+00:00,Kavya,RTX,submitted,buy,51,392dd47f-a5c6-41b2-b1db-914a5512b291,
+2026-10-16T17:39:19.995421+00:00,Kavya,JPM,submitted,buy,1,861b536e-7956-4b5b-ae9e-979832b9acb2,
+2026-10-16T17:39:19.995421+00:00,Kavya,UBER,submitted,buy,1,321a2645-80c5-46ba-ba1a-76b90b4ec451,
+2026-10-16T18:06:50.515414+00:00,Kunal,MPC,submitted,buy,20,85fc16de-31d8-4905-aafa-e5b9935e471d,
+2026-10-16T18:06:50.515414+00:00,Navroop,MO,submitted,buy,133,3c83ac33-6cd7-400c-bfa2-760d3cd7c038,
+2026-10-16T18:06:50.515414+00:00,Kavya,EG,submitted,buy,25,3dae7583-240f-415c-8432-c59f7b8f32c1,
+2026-10-16T18:06:50.515414+00:00,Kunal,TRV,submitted,buy,1,53064bbe-47cf-46af-a39a-1fb697aed6c0,
+2026-10-16T18:06:50.515414+00:00,Navroop,OXY,submitted,buy,3,b66b1d96-4327-4638-86cc-c194e724dada,
+2026-10-16T18:06:50.515414+00:00,Kavya,LH,submitted,buy,1,b979be92-a81d-44b4-a6c7-4019463da26a,
+2026-10-16T18:06:50.515414+00:00,Kunal,OTIS,submitted,buy,3,fd77d6ed-6ddc-40a9-97ed-764182d4a5a7,
+2026-10-16T18:06:50.515414+00:00,Kavya,TECH,submitted,buy,3,fc094563-bc4d-40df-8432-6e137e510e52,
+2026-10-16T18:06:50.515414+00:00,Navroop,AMAT,submitted,sell,19,7853df44-d873-4f84-91ed-f280493ba9a9,
+2026-10-16T18:06:50.515414+00:00,Navroop,COP,submitted,sell,74,59e3784b-9055-433c-8452-14b9798ee474,
+2026-10-16T18:06:50.515414+00:00,Kunal,CSCO,submitted,sell,84,79ef6743-5221-4581-b16a-91d7ad632f40,
+2026-10-16T18:06:50.515414+00:00,Kunal,PLTR,submitted,sell,47,c96549e1-bc7e-4ccb-87d4-a200c546d876,
+2026-10-16T18:10:55.349672+00:00,Kunal,VRSK,submitted,buy,52,40a59974-dcfc-45cd-85a0-280b695480e3,
+2026-10-16T18:10:55.349672+00:00,Navroop,VEEV,submitted,buy,32,3bba50ae-adc2-469a-8f15-476fe1ad1266,
+2026-10-16T18:10:55.349672+00:00,Kunal,ADSK,submitted,buy,33,5ebd0cac-0df1-4d1d-a582-e4f5b59fc116,
+2026-10-16T18:10:55.349672+00:00,Navroop,TJX,submitted,buy,60,1ce457c1-8355-47b0-a1aa-46e4a5437413,
+2026-10-16T18:10:55.349672+00:00,Navroop,ORLY,submitted,buy,1,882bad4e-bf17-49d2-a7b2-2af3b30216d7,
+2026-10-16T18:10:55.349672+00:00,Kunal,BAX,submitted,buy,4,c0497fd7-3135-4b3d-ba4e-4f9aefbfe2c6,
+2026-10-20T14:13:30.588469+00:00,Kunal,HST,submitted,buy,1,72de35dc-15aa-48bb-8efd-fb67a3aa74d0,
+2026-10-20T14:13:30.588469+00:00,Kunal,BAX,submitted,sell,4,77552365-8a60-4e98-9d2c-776d7029816b,
+2026-10-20T14:13:30.588469+00:00,Navroop,MA,submitted,sell,16,3e26cac5-9e92-4466-83d7-d116bbe71338,
+2026-10-20T14:13:30.588469+00:00,Kunal,V,submitted,sell,4,2ebba5ea-3b41-423f-bd6f-5162dad569c8,
+2026-10-20T14:16:35.618373+00:00,Kunal,COR,submitted,buy,5,f4fb63ab-0246-491e-83c1-b0374eeafef6,
+2026-10-20T14:16:35.618373+00:00,Navroop,ABNB,submitted,buy,46,c46c65d0-a1f4-466d-8aed-0ebe7be50ff5,
